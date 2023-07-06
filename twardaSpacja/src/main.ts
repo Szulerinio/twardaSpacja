@@ -1,24 +1,27 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
+const inText = document.querySelector<HTMLTextAreaElement>("#inText");
+const outText = document.querySelector<HTMLTextAreaElement>("#outText");
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+const main = (event: Event) => {
+  const inValue = (event?.currentTarget as HTMLTextAreaElement).value;
+  const splitInValue = inValue.trim().split(" ").filter((val)=>!!val);
+  let outValue = "";
+  
+  for (let index = 0; index < splitInValue.length; index++) {
+    if(index===splitInValue.length-1){ //last word doesn't need space
+      outValue+= splitInValue[index] 
+    }else if(splitInValue[index].length===1){ //word is short, shoud have hard space
+      outValue+= `${splitInValue[index]}\u00A0`;
+    }else{                             //word is long, shoud have normal space
+      outValue+= `${splitInValue[index]} `;
+    }
+    
+  }
+  if (outText) {
+    outText.value = outValue;
+
+  }
+};
+inText?.addEventListener("change", main);
+inText?.addEventListener("input", main);
